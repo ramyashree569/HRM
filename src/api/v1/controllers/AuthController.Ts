@@ -43,14 +43,15 @@ class AuthController extends BaseEntity {
   };
   static login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    let user;
+    let user: Auth | null;
     try {
       user = await dbParams.manager.findOneBy(Auth, { email: email });
       if (user && !user.isValidPassword(password)) {
         res.status(401).send("Incorrect password");
         return;
       }
-      res.status(200).json({ access_token: user?.generate_JWT });
+      let token = await user?.generate_JWT();
+      res.status(200).json({ access_token: token });
     } catch (e) {
       return res.status(401).send(e);
     }

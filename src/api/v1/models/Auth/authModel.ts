@@ -56,8 +56,8 @@ export class Auth extends BaseEntity {
     return bcrypt.hashSync(password, salt);
   };
 
-  generate_JWT = () => {
-    return jwt.sign(
+  generate_JWT = async () => {
+    return await jwt.sign(
       {
         email: this.email,
       },
