@@ -6,8 +6,7 @@ import {
   Unique,
   BaseEntity,
 } from "typeorm";
-import * as bcrypt from "bcryptjs";
-import * as jwt from "jsonwebtoken";
+import { CountryCode_Enums } from "../../helpers/constants";
 
 @Unique("unique_constraint", ["email", "phone_number"])
 @Entity()
@@ -37,32 +36,18 @@ export class Auth extends BaseEntity {
   })
   company_name: string;
 
-  @Column()
+  @Column(
+    {
+      length: 10,
+    }
+  )
   @Index()
-  phone_number: number;
+  phone_number: string;
 
   @Column({
     type: "enum",
-    enum: ["+91", "+92"],
+    enum: [...CountryCode_Enums],
   })
   country_code: string;
-
-  isValidPassword = (password: string) => {
-    return bcrypt.compareSync(password, this.password);
-  };
-
-  setPassword = async (password: string) => {
-    const salt = await bcrypt.genSalt(10);
-    return bcrypt.hashSync(password, salt);
-  };
-
-  generate_JWT = async () => {
-    return await jwt.sign(
-      {
-        email: this.email,
-      },
-      "SECRET",
-      { expiresIn: "1h" }
-    );
-  };
+  
 }

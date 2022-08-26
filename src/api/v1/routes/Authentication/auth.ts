@@ -1,12 +1,14 @@
 import { Request, Response, Router } from "express";
-import AuthController from "../../controllers/AuthController";
+import { register, login, logout, displayData} from '../../controllers/AuthController';
 
 let authRouter = Router();
 
-authRouter.post("/login", AuthController.login);
+authRouter.post("/login", login);
 
-authRouter.post("/register", AuthController.register);
+authRouter.post("/register", register);
 
-authRouter.post("/logout", AuthController.logout);
+authRouter.post("/logout", logout);
+
+authRouter.post("/profile", displayData)
 
 export default authRouter;
